@@ -36,7 +36,7 @@ jobs:
             --data '{
               "parent": { "database_id": "'$NOTION_DATABASE_ID'" },
               "properties": {
-                "Name": {
+                "이름": {
                   "title": [
                     {
                       "text": {
