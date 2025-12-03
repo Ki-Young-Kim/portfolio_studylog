@@ -31,6 +31,7 @@ Unity 기반 XR/게임 클라이언트 개발자를 목표로 학습 중입니�
 - Shader & URP
 - Gameplay Architecture
 - Steam Launch Pipeline
+- Meta SDK
 - XR Interaction (적용 예정)
 
 ---
