@@ -19,7 +19,10 @@ jobs:
       - name: Get commit info
         id: commit
         run: |
-          echo "message=$(git log -1 --pretty=%B | head -n 1)" >> $GITHUB_OUTPUT
+          COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
+          COMMIT_MSG="${COMMIT_MSG//\"/\\\"}"
+          COMMIT_MSG="${COMMIT_MSG//\'/\\\'}"
+          echo "message=$COMMIT_MSG" >> $GITHUB_OUTPUT
           echo "author=$(git log -1 --pretty=%an)" >> $GITHUB_OUTPUT
           echo "sha=$(git log -1 --pretty=%h)" >> $GITHUB_OUTPUT
           echo "date=$(git log -1 --pretty=%ci)" >> $GITHUB_OUTPUT
@@ -28,22 +31,25 @@ jobs:
         env:
           NOTION_TOKEN: $ secrets.NOTION_TOKEN 
           NOTION_DATABASE_ID: $ secrets.NOTION_DATABASE_ID 
+          COMMIT_MESSAGE: $ steps.commit.outputs.message 
         run: |
           curl -X POST https://api.notion.com/v1/pages \
-            -H "Authorization: Bearer $NOTION_TOKEN" \
+            -H "Authorization: Bearer ${NOTION_TOKEN}" \
             -H "Content-Type: application/json" \
             -H "Notion-Version: 2022-06-28" \
-            --data '{
-              "parent": { "database_id": "'$NOTION_DATABASE_ID'" },
-              "properties": {
-                "이름": {
-                  "title": [
-                    {
-                      "text": {
-                        "content": "'"$ steps.commit.outputs.message "'"
-                      }
+            --data-binary @- <<EOF
+          {
+            "parent": { "database_id": "${NOTION_DATABASE_ID}" },
+            "properties": {
+              "이름": {
+                "title": [
+                  {
+                    "text": {
+                      "content": "${COMMIT_MESSAGE}"
                     }
-                  ]
-                }
+                  }
+                ]
               }
-            }'
+            }
+          }
+          EOF
