@@ -22,17 +22,24 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
           COMMIT_MSG="${COMMIT_MSG//\"/\\\"}"
           COMMIT_MSG="${COMMIT_MSG//\'/\\\'}"
+          COMMIT_SHA=$(git log -1 --pretty=%H)
+          COMMIT_DATE=$(git log -1 --pretty=%cI)
+
           echo "message=$COMMIT_MSG" >> $GITHUB_OUTPUT
-          echo "author=$(git log -1 --pretty=%an)" >> $GITHUB_OUTPUT
-          echo "sha=$(git log -1 --pretty=%h)" >> $GITHUB_OUTPUT
-          echo "date=$(git log -1 --pretty=%ci)" >> $GITHUB_OUTPUT
+          echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "date=$COMMIT_DATE" >> $GITHUB_OUTPUT
       
       - name: Send to Notion
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
-          COMMIT_MESSAGE: ${{ steps.commit.outputs.message }} 
+          COMMIT_MESSAGE: ${{ steps.commit.outputs.message }}
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
+          COMMIT_DATE: ${{ steps.commit.outputs.date }}
+          REPO_URL: ${{ github.repository }}
         run: |
+          COMMIT_URL="https://github.com/${REPO_URL}/commit/${COMMIT_SHA}"
+          
           curl -X POST https://api.notion.com/v1/pages \
             -H "Authorization: Bearer ${NOTION_TOKEN}" \
             -H "Content-Type: application/json" \
@@ -45,10 +52,21 @@ jobs:
                 "title": [
                   {
                     "text": {
-                      "content": "${COMMIT_MESSAGE}"
+                      "content": "${COMMIT_MESSAGE}",
+                      "link": {
+                        "url": "${COMMIT_URL}"
+                      }
                     }
                   }
                 ]
+              },
+              "링크": {
+                "url": "${COMMIT_URL}"
+              },
+              "날짜": {
+                "date": {
+                  "start": "${COMMIT_DATE}"
+                }
               }
             }
           }
