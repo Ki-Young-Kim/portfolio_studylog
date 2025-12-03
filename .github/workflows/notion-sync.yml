@@ -60,9 +60,6 @@ jobs:
                   }
                 ]
               },
-              "링크": {
-                "url": "${COMMIT_URL}"
-              },
               "날짜": {
                 "date": {
                   "start": "${COMMIT_DATE}"
