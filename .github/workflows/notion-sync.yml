@@ -29,9 +29,9 @@ jobs:
       
       - name: Send to Notion
         env:
-          NOTION_TOKEN: $ secrets.NOTION_TOKEN 
-          NOTION_DATABASE_ID: $ secrets.NOTION_DATABASE_ID 
-          COMMIT_MESSAGE: $ steps.commit.outputs.message 
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          COMMIT_MESSAGE: ${{ steps.commit.outputs.message }} 
         run: |
           curl -X POST https://api.notion.com/v1/pages \
             -H "Authorization: Bearer ${NOTION_TOKEN}" \
