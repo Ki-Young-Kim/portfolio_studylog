@@ -36,5 +36,5 @@ Unity 기반 XR/게임 클라이언트 개발자를 목표로 학습 중입니�
 ---
 
 ## 📬 Contact
-- Email: (네 이메일)
+- Email: kgy6022@gmail.com
 - GitHub: github.com/Ki-Young-Kim
