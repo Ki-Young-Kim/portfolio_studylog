@@ -19,6 +19,7 @@ Unity 기반 XR/게임 클라이언트 개발자를 목표로 학습 중입니�
 ## 📝 Learning Log
 > Daily commit 목표  
 > 학습한 내용을 짧게, 빈도 높게 기록
+> https://cute-postbox-949.notion.site/Daily-Dev-Log-2be8d9ee216580539cb4cc56d4a2b487
 
 | Date | Topic | Summary | Commit Link |
 |------|-------|---------|-------------|
